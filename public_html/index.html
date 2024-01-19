@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<style>
+html, body, * {
+	font-size: 17px;
+}
+</style>
+<title>CRUD - Google Spreadsheet</title>
+</head>
+<body>
+
+<input type="button" class="get" value="get db">
+<input type="button" class="add" value="add row">
+<input type="button" class="update" value="update row">
+<input type="button" class="remove" value="remove row">
+<pre class="data"></pre>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const $ = elem => { return document.querySelector(elem) };
+var socket = io();
+$('.get').addEventListener('click', function(e){
+	e.preventDefault();
+	socket.emit('get');
+	return false;
+});
+$('.update').addEventListener('click', function(e){
+	e.preventDefault();
+	socket.emit('update', {
+		barcode: "NT00000001",
+		status: "1"
+	});
+	return false;
+});
+$('.remove').addEventListener('click', function(e){
+	e.preventDefault();
+	socket.emit('remove', {
+		barcode: "NT00000270",
+		status: "4"
+	});
+	return false;
+});
+$('.add').addEventListener('click', function(e){
+	e.preventDefault();
+	socket.emit('add', {
+		name: "Shallow now",
+		service: "2",
+		description: "Lorem Ipsum is simply dummy text of text.",
+		status: "3",
+		price: "10",
+		barcode: "NT00000270",
+		addedat: "A",
+		finishat: "B"
+	});
+	return false;
+});
+socket.on('data', function(data){
+	$('.data').innerHTML = JSON.stringify(data, null, '\t');
+});
+</script>
+
+</body>
+</html>
